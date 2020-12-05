@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Helpers\Template;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,7 +29,7 @@ class ProductFactory extends Factory
 
         return array_merge([
             'category_id' => $category->id,
-            'slug' => $this->faker->slug(2),
+            'slug' => $this->faker->slug(2).rand(000, 111),
             'type' => $type,
             'code' => "{$this->faker->countryCode}-{$this->faker->randomNumber(8)}",
             'rating' => rand(0, 2000),
@@ -51,5 +52,12 @@ class ProductFactory extends Factory
             ];
         }
         return $data;
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Product $product) {
+            Template::factoryFilesLoader($product);
+        });
     }
 }

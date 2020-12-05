@@ -11,6 +11,7 @@ class StaticPagePart extends Model
     use HasFactory;
     use Translatable;
 
+    # !Parameters
     protected $fillable = ['key'];
     public $translatedAttributes = ['menu_text', 'title', 'sub_title', 'content'];
     public $timestamps = false;

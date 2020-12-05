@@ -1,6 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\OrderController;
+
+use App\Helpers\Utils;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +19,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:api', 'domain' => 'api.'.env('APP_DOMAIN')], function () {
+    Route::apiResource('category', CategoryController::class);
+    Route::apiResource('product', ProductController::class);
+    Route::apiResource('cart', CartController::class);
+    Route::apiResource('order', OrderController::class);
 });
+
+

@@ -11,20 +11,24 @@ class StaticPage extends Model
     use HasFactory;
     use Translatable;
 
-    const ROUTE_NAME = 'static-page';
+    # !Constants
+    private const ROUTE_NAME = 'static-page';
 
+    # !Parameters
     protected $fillable = ['slug'];
     public $translatedAttributes = ['menu_text', 'seo_title', 'seo_description', 'seo_keywords'];
     public $timestamps = false;
 
+    # !Relations
     public function parts()
     {
         return $this->hasMany(StaticPagePart::class);
     }
 
+    # !Mutators
     public function getRouteAttribute()
     {
-        return route(self::ROUTE_NAME, ['url' => $this->url]);
+        return route('staticPage', ['url' => $this->url]);
     }
 
     public static function getDisplayingPages()

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\SeoSetting;
 
 class CreateSeoSettingsTable extends Migration
 {
@@ -16,10 +17,16 @@ class CreateSeoSettingsTable extends Migration
         Schema::create('seo_settings', function (Blueprint $table) {
             $table->id();
             # IF Model
-            $table->string('model')->nullable();
-            $table->string('model_id')->nullable();
+            $table->nullableMorphs('model');
             # Else URL
             $table->string('url')->nullable();
+
+            # DEFAULT META #
+            $table->string('meta_robots')->nullable()->default(SeoSetting::META_ROBOTS_ALL);
+
+            # OPEN GRAPH #
+            $table->string('og_image')->nullable();
+            $table->string('og_type')->nullable();
         });
     }
 

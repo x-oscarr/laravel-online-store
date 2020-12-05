@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,7 +28,7 @@ class OrderFactory extends Factory
         $deliveryType = array_rand(Order::DELIVERY_TYPES);
         $payType = array_rand(Order::PAY_TYPES);
         if($status != Order::STATUS_NEW) {
-            $manager = User::where('role', User::ROLE_MANAGER)->random(1)->first();
+            $manager = User::where('role', User::ROLE_MANAGER)->inRandomOrder()->first();
         }
         if($deliveryType == Order::DELIVERY_TYPE_WAREHOUSE) {
             $warehouse = "Отделение №{$this->faker->numberBetween(0, 30)}";
@@ -57,20 +56,11 @@ class OrderFactory extends Factory
 
     public function configure()
     {
-        $this->afterCreating(function (Order $order) {
-            $itemQuantity = rand(1, 7);
-            $products = Product::where('is_available', true)
-                ->random($itemQuantity)
-                ->first();
-            for ($i = $itemQuantity; $i > 0; $i--) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $products[$i],
-                    'price' => $products[$i]->price,
-                    'count' => rand(0, 3) ? 1 : rand(2, 7),
-                    'discount' => rand(0, 10) ? null : rand(10, ($products[$i]->price/3))
-                ]);
-            }
+        return $this->afterCreating(function (Order $order) {
+            $orderItemFactory = OrderItem::factory();
+            $orderItemFactory->times(rand(1, 10))->create([
+                'order_id' => $order->id,
+            ]);
         });
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Fake;
 
+use App\Models\Feedback;
 use Illuminate\Database\Seeder;
 
 class FakeFeedbackSeeder extends Seeder
@@ -13,6 +14,8 @@ class FakeFeedbackSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Feedback::factory()
+            ->times(100)
+            ->create();
     }
 }

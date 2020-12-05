@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Category;
+use App\Models\SeoSetting;
 
 class CategoryObserver
 {
@@ -14,7 +15,7 @@ class CategoryObserver
      */
     public function created(Category $category)
     {
-        //
+        $category->seo()->create($category->seoSettings);
     }
 
     /**

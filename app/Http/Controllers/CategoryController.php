@@ -10,4 +10,9 @@ class CategoryController extends Controller
     {
         return view('category.catalog');
     }
+
+    public function category()
+    {
+        return view('category.catalog');
+    }
 }

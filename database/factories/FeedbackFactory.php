@@ -23,12 +23,13 @@ class FeedbackFactory extends Factory
      */
     public function definition()
     {
+        $order = null;
         $user = User::all()->random(1)->first();
         $type = array_rand(Feedback::TYPES);
-        if($type === Feedback::TYPE_PAYMENT) {
+        if($type == Feedback::TYPE_PAYMENT) {
             $order = Order::all()->random(1)->first();
         }
-        if(!$type == Feedback::TYPE_CALL_ME && !$type == Feedback::TYPE_PAYMENT) {
+        if($type != Feedback::TYPE_CALL_ME && $type != Feedback::TYPE_PAYMENT) {
             $comment = $this->faker->text(100);
         }
 

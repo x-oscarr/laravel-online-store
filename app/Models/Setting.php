@@ -7,15 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    use HasFactory;
-
+    # Parameters
     public $timestamps = false;
 
+    # Methods
     static public function get($key) {
         return self::where('key', $key)->first();
-    }
-
-    public function getParametersAttribute() {
-        return json_decode($this->params);
     }
 }

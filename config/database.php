@@ -145,4 +145,5 @@ return [
     ],
 
     'run_fake_seeders' => true,
+    'run_template_seeders' => false,
 ];

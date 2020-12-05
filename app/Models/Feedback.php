@@ -9,6 +9,7 @@ class Feedback extends Model
 {
     use HasFactory;
 
+    # !Constants
     const TYPE_CALL_ME = 'call_me';
     const TYPE_REVIEW = 'review';
     const TYPE_COMPLAINT = 'complaint';
@@ -21,8 +22,10 @@ class Feedback extends Model
         self::TYPE_PAYMENT => 'model.feedback.type.payment',
     ];
 
+    # !Parameters
     protected $fillable = ['type', 'is_processed', 'comment', 'is_displayed'];
 
+    # !Relations
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -33,6 +36,7 @@ class Feedback extends Model
         return $this->belongsTo(Order::class);
     }
 
+    # !Mutators
     public function getTypeNameAttribute()
     {
         return trans(self::TYPES[$this->type]);

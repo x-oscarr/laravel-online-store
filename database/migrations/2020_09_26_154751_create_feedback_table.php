@@ -16,7 +16,7 @@ class CreateFeedbackTable extends Migration
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('type');
+            $table->string('type');
             $table->boolean('is_processed')->default(false);
             // Additional
             $table->foreignId('order_id')->nullable(true)->constrained()->onDelete('cascade');

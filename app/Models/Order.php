@@ -9,6 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
+    # !Constants
     const STATUS_NEW = 0;
     const STATUS_ACCEPTED = 1;
     const STATUS_PAYED = 2;
@@ -45,6 +46,10 @@ class Order extends Model
         self::PAY_TYPE_CASH => 'model.order.pay_type.cash',
     ];
 
+    # !Parameters
+    public $fillable = ['user_id', 'status', 'city', 'warehouse', 'address', 'comment', 'delivery_type', 'pay_type', ];
+
+    # !Relations
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
@@ -60,6 +65,17 @@ class Order extends Model
         return $this->belongsTo(User::class, 'manager_id');
     }
 
+    # !Attributes
+    public function getTotalPriceAttribute()
+    {
+        $totalPrice = 0;
+        foreach($this->items as $item) {
+            $totalPrice += $item->price * $item->count;
+        }
+        return $totalPrice;
+    }
+
+    # !Methods
     public function setItem(Product $product, int $qty)
     {
         $orderItem = new OrderItem();
@@ -74,14 +90,7 @@ class Order extends Model
             ($product->amount === 0) ? $product->amount = false : null;
             $product->save();
         }
-    }
 
-    public function getTotalPriceAttribute()
-    {
-        $totalPrice = 0;
-        foreach($this->items as $item) {
-            $totalPrice += $item->price*$item->count;
-        }
-        return $totalPrice;
+        return $this;
     }
 }

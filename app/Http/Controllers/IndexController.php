@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utils;
+use App\Models\Category;
+use App\Models\FileModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class IndexController extends Controller
 {
@@ -13,9 +18,6 @@ class IndexController extends Controller
 
     public function test(Request $request)
     {
-        if($request->all()) {
-            $request->file('avatar');
-        }
-        return view('test');
+
     }
 }

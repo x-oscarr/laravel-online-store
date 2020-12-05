@@ -51,14 +51,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
-
-        'factory_public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/factory'),
-            'url' => env('APP_URL').'/storage/factory',
+            'url' => config('app.url').'/storage',
             'visibility' => 'public',
         ],
 
@@ -86,9 +79,16 @@ return [
     */
 
     'links' => [
+        //Storage
         public_path('storage') => storage_path('app/public'),
+        base_path('resources') => base_path('templates/'.config('app_template.template').'/resources')
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Mime types
+    |--------------------------------------------------------------------------
+    */
     'mime_types' => [
         'image' => ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/svg+xml', 'image/tiff', 'image/webp'],
         'video' => ['video/mpeg', 'video/webm', 'video/x-msvideo'],
@@ -108,13 +108,19 @@ return [
     ],
 
     'types' => [
-        'product_main_image' => [
+        'product_image' => [
             'disc' => 'public',
-            'path' => 'products'
+            'path' => 'products',
+            'default_file' => '',
         ],
         'category_image' => [
             'disc' => 'public',
-            'path' => 'category'
-        ]
-    ]
+            'path' => 'category',
+            'default_file' => '',
+        ],
+    ],
+
+    'default_files' => [
+        'image' => ''
+    ],
 ];

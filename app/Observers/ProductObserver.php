@@ -15,11 +15,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        SeoSetting::insert([
-            'model' => get_class($product),
-            'model_id' => $product->id,
-            'title' => ''
-        ]);
+        $product->seo()->create($product->seoSettings);
     }
 
     /**
@@ -41,7 +37,7 @@ class ProductObserver
      */
     public function deleted(Product $product)
     {
-        //
+        SeoSetting::destroy($product->seo);
     }
 
     /**
@@ -63,6 +59,6 @@ class ProductObserver
      */
     public function forceDeleted(Product $product)
     {
-        //
+        SeoSetting::destroy($product->seo);
     }
 }
