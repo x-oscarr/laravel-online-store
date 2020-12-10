@@ -44,3 +44,7 @@ Route::get('redirect', function (\Symfony\Component\HttpFoundation\Request $requ
 
     return redirect('http://127.0.0.1:8000/oauth/authorize?'.$query);
 });
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return Inertia\Inertia::render('Dashboard');
+})->name('dashboard');

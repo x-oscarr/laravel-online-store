@@ -1,41 +1,3 @@
-@import 'theme_color';
-@import 'variables';
-@import 'mixin';
-@import 'responsive';
-
-/* [Master Stylesheet v-1.0.0] */
-
-/* :: :: 1.0 Import Fonts */
-
-@font-face {
-    font-family: 'helveticaneuebold';
-    src: url('../fonts/helvetica_neu_bold-webfont.woff2') format('woff2'),
-    url('../fonts/helvetica_neu_bold-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'helveticaneuemedium';
-    src: url('../fonts/helveticaneue_medium-webfont.woff2') format('woff2'),
-    url('../fonts/helveticaneue_medium-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* :: 2.0 Import All CSS */
-@import "~bootstrap/scss/bootstrap";
-@import "~font-awesome/scss/font-awesome";
-@import "~animate.css";
-//@import "~owl.carousel/src/scss/owl.carousel";
-@import "~jquery-nice-select/scss/nice-select";
-
-@import '~animate.css/animate.css';
-@import "~magnific-popup/dist/magnific-popup.css";
-//@import '../css/jquery-ui.min.css';
-
-/* :: 3.0 Base CSS */
-
 * {
     margin: 0;
     padding: 0;
@@ -1673,5 +1635,3 @@ img {
         }
     }
 }
-
-/* ##### The End ##### */

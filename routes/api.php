@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'auth:api', 'domain' => 'api.'.env('APP_DOMAIN')], function () {
+Route::group(['middleware' => 'auth:sanctum', 'domain' => 'api.'.env('APP_DOMAIN')], function () {
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('product', ProductController::class);
     Route::apiResource('cart', CartController::class);
