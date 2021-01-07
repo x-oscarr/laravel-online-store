@@ -20,6 +20,11 @@ class SeoSetting extends Model
 
     # !Parameters
     public $timestamps = false;
+
+    public $fillable = [
+        'meta_robots', 'og_image', 'og_type',
+    ];
+
     public $translatedAttributes = [
         'title', 'description',
         'meta_title', 'meta_description', 'meta_keywords',
@@ -32,24 +37,20 @@ class SeoSetting extends Model
         return $this->morphTo('model');
     }
 
-    # !Mutators
-    public function getTitleAttribute()
+    public function seoAttributesToArray()
     {
-        return trans("seo.templates.title", [$this->title]);
-    }
-
-    public function getDescriptionAttribute()
-    {
-        return trans("seo.templates.description", [$this->description]);
-    }
-
-    public function getMetaTitleAttribute()
-    {
-        return trans("seo.templates.meta_title", [$this->meta_title]);
-    }
-
-    public function getMetaDescriptionAttribute()
-    {
-        return trans("seo.templates.meta_description", [$this->meta_description]);
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'meta_title' => $this->meta_title,
+            'meta_description' => $this->meta_description,
+            'meta_keywords' => $this->meta_keywords,
+            'meta_robots' => $this->meta_robots,
+            'og_title' => $this->og_title,
+            'og_description' => $this->og_description,
+            'og_image' => $this->og_image,
+            'og_type' => $this->og_type,
+            'og_site_name' => $this->og_site_name,
+        ];
     }
 }

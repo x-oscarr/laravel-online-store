@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasApi;
 use App\Models\Traits\SeoSettings;
 use App\Scopes\IsEnabledScope;
 use App\Scopes\Local\FindBySlugScope;
@@ -22,8 +23,9 @@ class Product extends Model
 
     # !Parameters
     protected $fillable = [
-        'slug', 'type', 'code', 'price', 'unit', 'amount',
-        'is_new', 'is_available', 'is_enabled', 'seo_settings'
+        'category_id',
+        'slug', 'type', 'code', 'price', 'old_price', 'unit', 'amount',
+        'is_new', 'is_available', 'is_enabled'
     ];
     public $translatedAttributes = ['name', 'description'];
 

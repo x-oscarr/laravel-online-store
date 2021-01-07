@@ -2,64 +2,88 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CreateOrderRequest;
+use App\Http\Requests\Api\UpdateOrderRequest;
+use App\Http\Resources\OrderResource;
+use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
-class OrderController extends Controller
+class OrderController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request): AnonymousResourceCollection
     {
-        //
+        $accessAbility = 'read';
+        $abilities = OrderResource::apiScopes($accessAbility);
+        $this->checkAccess($abilities);
+
+        $orderQuery = Order::query();
+        OrderResource::abilityAccess($accessAbility) ? $orderQuery->where('user_id', Auth::user()->id) : null;
+        $orderQuery = $this->queryWithSearch($orderQuery, $request, OrderResource::SEARCH_MODE_PARAMETERS);
+        $orderQuery = $this->queryWithParams($orderQuery, $request, OrderResource::ATTR_PARAMETERS);
+        $orderQuery = $this->queryWithSort($orderQuery, $request, OrderResource::SORT_PARAMETERS);
+        $orderQuery = $this->queryWithLimits($orderQuery, $request);
+        return OrderResource::collection($orderQuery->get());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(CreateOrderRequest $request): OrderResource
     {
-        //
+        $abilities = OrderResource::apiScopes('create');
+        $this->checkAccess($abilities);
+        $order = Order::create($request->all());
+        return new OrderResource($order);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function show(Order $order)
     {
-        //
+        $accessAbility = 'read';
+        $abilities = OrderResource::apiScopes($accessAbility);
+        $this->checkAccess($abilities);
+
+        if(OrderResource::abilityAccess($accessAbility) && $order->user_id != Auth::user()->id) {
+            return $this->error('access_error', [
+               'scopes' => OrderResource::apiScopes($accessAbility, true)[0]
+            ]);
+        }
+
+        return new OrderResource($order);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-        //
+        $accessAbility = 'update';
+        $abilities = OrderResource::apiScopes($accessAbility);
+        $this->checkAccess($abilities);
+
+        if(OrderResource::abilityAccess($accessAbility) && $order->user_id != Auth::user()->id) {
+            return $this->error('access_error', [
+                'scopes' => OrderResource::apiScopes($accessAbility, true)[0]
+            ]);
+        }
+
+        $order->update($request->all());
+        return new OrderResource($order);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Order $order)
     {
-        //
+        $accessAbility = 'delete';
+        $abilities = OrderResource::apiScopes('delete');
+        $this->checkAccess($abilities);
+
+        if(OrderResource::abilityAccess($accessAbility) && $order->user_id != Auth::user()->id) {
+            return $this->error('access_error', [
+                'scopes' => OrderResource::apiScopes($accessAbility, true)[0]
+            ]);
+        }
+
+        $order->delete();
+        $this->response([null, Response::HTTP_OK]);
     }
+
+
 }

@@ -21,7 +21,6 @@ class CreateOrderItemsTable extends Migration
             $table->integer('count')->default(1);
             $table->integer('discount')->nullable();
             $table->json('product_info')->nullable();
-            $table->timestamps();
         });
     }
 

@@ -93,4 +93,15 @@ class Order extends Model
 
         return $this;
     }
+
+    public function toArray()
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'total_price' => $this->getTotalPriceAttribute(),
+
+            ]
+        );
+    }
 }

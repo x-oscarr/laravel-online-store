@@ -47,4 +47,42 @@ return [
         'encrypt_cookies' => App\Http\Middleware\EncryptCookies::class,
     ],
 
+    'accept' => 'application/vnd.nuxcore.public.v1+json',
+
+    'settings' => [
+        'limit' => 500,
+        'sort' => [
+            'relevance' => ['id', 'desc'],
+            'novelty' => ['created_at', 'asc'],
+            '-novelty' => ['created_at', 'desc'],
+            // For products
+            'price' => ['price', 'asc'],
+            '-price' => ['price', 'desc'],
+            '-popularity' => ['rating', 'desc'],
+        ],
+        'search_mode' => [
+            'REGULAR' => ['name'],
+            'DESCRIPTIONS' => ['translation.name', 'translation.description']
+        ]
+    ],
+
+    'errors' => [
+        // 400 Bad request
+        'parameter_not_available' => [
+            'status' => 400,
+            'message' => 'errors.api.message.parameter_not_available'
+        ],
+
+        // 403 Forbidden
+        'access_error' => [
+            'status' => 403,
+            'message' => 'errors.api.message.access_error'
+        ],
+
+        // 404 Not Found
+        'resource_item_not_found' => [
+            'status' => 404,
+            'message' => 'errors.api.message.resource_item_not_found'
+        ],
+    ]
 ];

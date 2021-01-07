@@ -26,7 +26,7 @@ class Category extends Model
 
     # !Parameters
     protected $fillable = ['slug', 'type', 'position', 'is_displayed'];
-    public $translatedAttributes = ['name', 'description', 'seo_title', 'seo_description', 'seo_keywords'];
+    public $translatedAttributes = ['name', 'description'];
 
     protected static function booted()
     {

@@ -18,6 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    # !Constants
     const ROLE_USER = 'user';
     const ROLE_MANAGER = 'manager';
     const ROLE_ADMIN = 'admin';
@@ -28,8 +29,15 @@ class User extends Authenticatable
         self::ROLE_ADMIN => 'model.user.role.admin',
     ];
 
+    # !Parameters
     protected $fillable = ['name', 'email', 'password', 'phone_number', 'role', 'city', 'address'];
     protected $hidden = ['password', 'remember_token',];
     protected $casts = ['email_verified_at' => 'datetime',];
     protected $appends = ['profile_photo_url',];
+
+    # !Relationships
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
 }

@@ -29,4 +29,17 @@ class OrderItem extends Model
     {
         return (int)$this->count * $this->price;
     }
+
+    public function getProductInfoAttribute()
+    {
+        return json_decode($this->attributes['product_info'], true);
+    }
+
+    public function toArray()
+    {
+        $attributes = parent::toArray();
+        $attributes['product_info'] = $this->getProductInfoAttribute();
+        $attributes['total_price'] = $this->getTotalPriceAttribute();
+        return $attributes;
+    }
 }

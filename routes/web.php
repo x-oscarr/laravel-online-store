@@ -29,21 +29,15 @@ Route::get('product/{slug}', [ProductController::class, 'index'])->name('product
 
 Route::get('p/{slug}', [StaticPageController::class, 'view'])->name('staticPage');
 
-Route::any('test1', [IndexController::class, 'test'])->name('test');
+Route::middleware(['auth:sanctum', 'scopes:check-status,place-orders'])->get('test', [IndexController::class, 'test'])->name('test');
 
-Route::get('redirect', function (\Symfony\Component\HttpFoundation\Request $request) {
-    $request->session()->put('state', $state = Str::random(40));
+Route::get('/tokens/create', function (\Symfony\Component\HttpFoundation\Request $request) {
+    $token = $request->user()->createToken('test3', ['testq']);
 
-    $query = http_build_query([
-        'client_id' => 'client-id',
-        'redirect_uri' => 'http://127.0.0.1:8000/test',
-        'response_type' => 'code',
-        'scope' => '',
-        'state' => $state,
-    ]);
-
-    return redirect('http://127.0.0.1:8000/oauth/authorize?'.$query);
+    return ['token' => $token->plainTextToken];
 });
+
+Route::apiResource('aproduct', \App\Http\Controllers\Api\ProductController::class);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
