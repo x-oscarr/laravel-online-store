@@ -3,23 +3,29 @@
 namespace App\Http\Composers;
 
 use App\Models\Setting;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class SettingsComposer
 {
-    protected $settings;
-
-    public function __construct()
+    protected function settings(): Collection
     {
         $settingsModels = Setting::all();
         $settingsParams = collect();
         foreach($settingsModels as $model) {
             $settingsParams->put($model->key, $model->value ?? json_decode($model->vars));
         }
+        return $settingsParams;
     }
 
-    public function compose(View $view)
+    protected function metadata(): Collection
     {
-        $view->with('settings', $this->settings);
+        return collect();
+    }
+
+    public function compose(View $view): void
+    {
+        $view->with('settings', $this->settings());
+        $view->with('metadata', $this->metadata());
     }
 }

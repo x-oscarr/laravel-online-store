@@ -5,7 +5,7 @@ namespace App\Scopes\Local;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\Response;
 
 trait FindBySlugScope

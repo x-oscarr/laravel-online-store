@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasImages;
+use RuntimeException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class FileModel extends Model
 {
     use HasFactory;
+    use HasImages;
 
     const TYPE_PRODUCT_IMAGE = 'product_image';
     const TYPE_CATEGORY_IMAGE = 'category_image';
@@ -35,34 +38,33 @@ class FileModel extends Model
         return $this->morphTo('model');
     }
 
-    public function fileInStorage()
+    public function fileInStorage(): Relation
     {
-        return $this->hasOne(File::class);
+        return $this->hasOne(File::class, 'id', 'file_id');
     }
 
     # Mutators
-
-    public function getFileAttribute()
+    public function getFileUrlAttribute()
     {
-        if($this->url) {
+        if ($this->url) {
             return $this->url;
-        } elseif($this->fileInStorage) {
-            return Storage::url($this->fileInStorage->original_name);
-        } else {
-            if($this->type && config("filesystems.types.$this->type.default_file")) {
-                return config("filesystems.types.$this->type.default_file");
-            }
-            return config('filesystems.default_files.image');
         }
+
+        if ($this->fileInStorage) {
+            return $this->fileInStorage->fileUrl;
+        }
+
+        $this->getDefaultFile();
     }
 
-    public function setFileAttribute($file) {
+    public function setFileAttribute($file): void
+    {
         if ($file instanceof \SplFileInfo) {
             $this->uploadedFile = $file;
         } elseif (strpos($file, 'http') !== false) {
             $attributes['url'] = $file;
         } else {
-            throw new \Exception('Attribute "file" not identified');
+            throw new RuntimeException('Attribute "file" not identified');
         }
     }
 

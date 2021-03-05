@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Observers\CategoryObserver;
 use App\Observers\FileModelObserver;
 use App\Observers\ProductObserver;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
@@ -36,5 +37,8 @@ class AppServiceProvider extends ServiceProvider
         FileModel::observe(FileModelObserver::class);
         Category::observe(CategoryObserver::class);
         Product::observe(ProductObserver::class);
+
+        Paginator::defaultView(config('view.pagination.view'));
+        Paginator::defaultSimpleView(config('view.pagination.simple_view'));
     }
 }

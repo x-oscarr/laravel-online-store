@@ -2,24 +2,22 @@
 
 namespace App\Http\Composers;
 
+use App\Models\Category;
 use App\Models\Setting;
 use Illuminate\View\View;
 
 class IndexComposer
 {
     protected $settings;
+    protected $menuCategories;
 
     public function __construct()
     {
-        $settingsModels = Setting::all();
-        $settingsParams = collect();
-        foreach($settingsModels as $model) {
-            $settingsParams->put($model->key, $model->value ?? json_decode($model->vars));
-        }
+        $this->menuCategories = Category::where('is_menu_item', true)->get();
     }
 
-    public function compose(View $view)
+    public function compose(View $view): void
     {
-        $view->with('settings', $this->settings);
+        $view->with('menuCategories', $this->menuCategories);
     }
 }

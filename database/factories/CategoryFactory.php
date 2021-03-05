@@ -24,17 +24,18 @@ class CategoryFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return array_merge([
             'parent_id' => null,
-            'slug' => $this->faker->slug(2).rand(000, 111),
+            'slug' => $this->faker->slug(2).random_int(000, 111),
             'type' => array_rand(Category::TYPES),
-            'position' => rand(1, 20)
+            'position' => random_int(1, 20),
+            'is_menu_item' => true,
         ], $this->translations());
     }
 
-    public function configure()
+    public function configure(): CategoryFactory
     {
         return $this->afterCreating(function (Category $category) {
             Template::factoryFilesLoader($category);
@@ -42,23 +43,23 @@ class CategoryFactory extends Factory
         });
     }
 
-    protected function translations()
+    protected function translations(): array
     {
         $data = [];
         foreach (config('app.locales') as $locale) {
             $faker = \Faker\Factory::create($locale);
             $data[$locale] = [
-                'name' => $faker->text(35),
+                'name' => $faker->text(20),
                 'description' => $faker->text(250)
             ];
         }
         return $data;
     }
 
-    protected function productLoader(Category $category)
+    protected function productLoader(Category $category): void
     {
         $productFactory = Product::factory();
-        $productFactory->times(rand(15, 60))->create([
+        $productFactory::times(rand(15, 60))->create([
             'category_id' => $category->id,
             'type' => $category->type
         ]);

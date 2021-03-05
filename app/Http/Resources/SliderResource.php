@@ -6,10 +6,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SliderResource extends BaseResource
 {
-    const ATTR_PARAMETERS = ['type'];
-    const SORT_PARAMETERS = ['relevance'];
-    const SEARCH_MODE_PARAMETERS = [];
-    const RELATION_PARAMETERS = ['file'];
+    public const ATTR_PARAMETERS = ['type'];
+    public const SORT_PARAMETERS = ['relevance'];
+    public const SEARCH_MODE_PARAMETERS = [];
+    public const RELATION_PARAMETERS = ['file'];
 
     public function toArray($request): array
     {

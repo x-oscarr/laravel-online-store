@@ -7,12 +7,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends BaseResource
 {
-    const ATTR_PARAMETERS = ['type', 'price', 'is_enabled', 'is_available', 'is_new'];
-    const SORT_PARAMETERS = ['relevance', 'novelty', '-novelty', 'price', '-price', '-popularity'];
-    const SEARCH_MODE_PARAMETERS = ['REGULAR', 'DESCRIPTIONS'];
-    const RELATION_PARAMETERS = ['seo',];
+    public const ATTR_PARAMETERS = ['type', 'price', 'is_enabled', 'is_available', 'is_new'];
+    public const SORT_PARAMETERS = ['relevance', 'novelty', '-novelty', 'price', '-price', '-popularity'];
+    public const SEARCH_MODE_PARAMETERS = ['REGULAR', 'DESCRIPTIONS'];
+    public const RELATION_PARAMETERS = ['seo',];
 
-    public function toArray($request)
+    public function toArray($request): array
     {
         $attributes = $this->resource->attributesToArray();
         if($request->get('seo')) {

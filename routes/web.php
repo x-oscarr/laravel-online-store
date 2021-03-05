@@ -20,7 +20,13 @@ use App\Http\Controllers\StaticPageController;
 |
 */
 Route::get('/', [IndexController::class, 'index'])->name('index');
+
+Route::get('favorites', [FavoritesController::class, 'index'])->name('favorites');
+
+// Cart
 Route::get('cart', [CartController::class, 'index'])->name('cart');
+Route::post('cart/add', [CartController::class, 'add'])->name('cart.add');
+
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 
 Route::get('catalog', [CategoryController::class, 'catalog'])->name('catalog');
@@ -28,8 +34,6 @@ Route::get('catalog/{slug}', [CategoryController::class, 'category'])->name('cat
 Route::get('product/{slug}', [ProductController::class, 'index'])->name('product');
 
 Route::get('p/{slug}', [StaticPageController::class, 'view'])->name('staticPage');
-
-Route::middleware(['auth:sanctum', 'scopes:check-status,place-orders'])->get('test', [IndexController::class, 'test'])->name('test');
 
 Route::get('/tokens/create', function (\Symfony\Component\HttpFoundation\Request $request) {
     $token = $request->user()->createToken('test3', ['testq']);

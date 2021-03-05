@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Helpers\Template;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductParameter;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
@@ -35,6 +36,7 @@ class ProductFactory extends Factory
             'rating' => rand(0, 2000),
             'unit' => 'шт',
             'price' => $price,
+            'currency' => '₴',
             'amount' => rand(0, 1) ? rand(5, 300) : null,
             'old_price' => rand(0, 5) ? null : rand(400, $price),
         ], $this->translations());
@@ -58,6 +60,9 @@ class ProductFactory extends Factory
     {
         return $this->afterCreating(function (Product $product) {
             Template::factoryFilesLoader($product);
+
+            $paramsFactory = ProductParameter::factory();
+            $paramsFactory::times(100);
         });
     }
 }

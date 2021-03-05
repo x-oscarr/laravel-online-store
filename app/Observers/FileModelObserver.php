@@ -18,6 +18,7 @@ class FileModelObserver
         if ($fileModel->uploadedFile) {
             $file = File::store($fileModel->uploadedFile, $fileModel->type);
             $fileModel->file_id = $file->id;
+            $fileModel->save();
         }
     }
 

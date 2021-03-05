@@ -20,6 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->string('type')->default(\App\Models\Category::TYPE_DEFAULT);
             $table->integer('position')->default(1);
             $table->boolean('is_enabled')->default(true);
+            $table->boolean('is_menu_item')->default(false);
             $table->timestamps();
         });
     }

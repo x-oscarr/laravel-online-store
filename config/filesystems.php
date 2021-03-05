@@ -110,17 +110,17 @@ return [
     'types' => [
         'product_image' => [
             'disc' => 'public',
-            'path' => 'products',
-            'default_file' => '',
+            'path' => 'products/',
+            'default_file' => 'default/no-photo.png',
         ],
         'category_image' => [
             'disc' => 'public',
-            'path' => 'category',
-            'default_file' => '',
+            'path' => 'category/',
+            'default_file' => 'default/no-photo.png',
         ],
     ],
 
     'default_files' => [
-        'image' => ''
+        'image' => 'default/no-photo.png'
     ],
 ];

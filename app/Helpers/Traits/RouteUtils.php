@@ -8,33 +8,33 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\StaticPage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 trait RouteUtils
 {
-    static public function routeByModel(Model $model)
+    public static function routeByModel(Model $model): string
     {
-        if($model instanceof Category) {
-            return self::categoryRoute($model);
-        } elseif ($model instanceof Product) {
-            return self::productRoute($model);
-        } elseif ($model instanceof StaticPage){
-            return self::staticPageRoute($model);
+        if ($model instanceof Category) {
+            return route('category', ['slug' => $model->slug]);
         }
+
+        if ($model instanceof Product) {
+            return route('product', ['slug' => $model->slug]);
+        }
+
+        if($model instanceof StaticPage) {
+            return route('staticPage', ['slug' => $model->slug]);
+        }
+
+        return '';
     }
 
-    static public function categoryRoute(Category $category)
+    public static function isCurrentPath($url): bool
     {
-        $route = $category->parent ? 'category' : 'catalog';
-        return route($route, ['slug' => $category->slug]);
-    }
+        if(static::routeByModel($url)) {
+            $url = static::routeByModel($url);
+        }
 
-    static public function productRoute(Product $product)
-    {
-        return route('product', ['slug' => $product->slug]);
-    }
-
-    static public function staticPageRoute(StaticPage $page)
-    {
-        return route('staticPage', ['slug' => $page->slug]);
+        return Request::url() === $url;
     }
 }

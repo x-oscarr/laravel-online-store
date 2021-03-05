@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasImages;
 use App\Models\Traits\SeoSettings;
 use App\Scopes\IsEnabledScope;
 use App\Scopes\Local\FindBySlugScope;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Category extends Model
 {
     use HasFactory;
+    use HasImages;
     use Translatable;
     use SeoSettings;
 
@@ -41,17 +44,17 @@ class Category extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id', 'id');
+        return $this->belongsTo(self::class, 'parent_id', 'id');
     }
 
-    public function child()
+    public function childs()
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id');
+        return $this->hasMany(self::class, 'parent_id', 'id');
     }
 
     public function images()
     {
-        return $this->morphMany(FileModel::class, 'model')->where(FileModel::TYPE_CATEGORY_IMAGE);
+        return $this->morphMany(FileModel::class, 'model')->where('type', FileModel::TYPE_CATEGORY_IMAGE);
     }
 
     # !Mutators

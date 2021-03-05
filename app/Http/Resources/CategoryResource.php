@@ -5,12 +5,12 @@ namespace App\Http\Resources;
 
 class CategoryResource extends BaseResource
 {
-    const ATTR_PARAMETERS = ['parent_id', 'type', 'position', 'category_id',];
-    const SORT_PARAMETERS = ['relevance', 'novelty', '-novelty'];
-    const SEARCH_MODE_PARAMETERS = ['REGULAR', 'DESCRIPTIONS'];
-    const RELATION_PARAMETERS = ['seo',];
+    public const ATTR_PARAMETERS = ['parent_id', 'type', 'position', 'category_id',];
+    public const SORT_PARAMETERS = ['relevance', 'novelty', '-novelty',];
+    public const SEARCH_MODE_PARAMETERS = ['REGULAR', 'DESCRIPTIONS',];
+    public const RELATION_PARAMETERS = ['seo',];
 
-    public function toArray($request)
+    public function toArray($request): array
     {
         $attributes = $this->resource->attributesToArray();
         if($request->get('seo')) {

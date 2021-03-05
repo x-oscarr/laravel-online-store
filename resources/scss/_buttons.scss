@@ -1,0 +1,23 @@
+.btn {
+    padding: 8px 10px;
+    border-radius: 0;
+    border: 0;
+    color: #6d6d6d;
+
+    &:hover {
+        color: #000;
+    }
+
+    &.primary {
+        background: #fbb710;
+        color: #fff;
+    }
+
+    &.secondary {
+        background: #edeef1;
+    }
+
+    &.mx-1 {
+        margin: 0 5px;
+    }
+}

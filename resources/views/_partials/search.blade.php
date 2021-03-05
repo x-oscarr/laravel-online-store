@@ -9,7 +9,7 @@
                     <form action="#" method="get">
                         <input type="search" name="search" id="search" placeholder="Type your keyword...">
                         <button type="submit">
-                            <img src="{{ asset('images/core-img/search.png') }}" alt="">
+                            <span class="material-icons vertical-bottom">search</span>
                         </button>
                     </form>
                 </div>

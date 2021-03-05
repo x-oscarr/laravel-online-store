@@ -84,5 +84,13 @@ return [
             'status' => 404,
             'message' => 'errors.api.message.resource_item_not_found'
         ],
+
+        // Customs
+        'cart' => [
+            'product_not_found' => [
+                'status' => 400,
+                'message' => 'errors.api.message.cart.product_not_found'
+            ],
+        ],
     ]
 ];

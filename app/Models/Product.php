@@ -3,16 +3,19 @@
 namespace App\Models;
 
 use App\Models\Traits\HasApi;
+use App\Models\Traits\HasImages;
 use App\Models\Traits\SeoSettings;
 use App\Scopes\IsEnabledScope;
 use App\Scopes\Local\FindBySlugScope;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Product extends Model
 {
     use HasFactory;
+    use HasImages;
     use Translatable;
     use SeoSettings;
 
@@ -29,20 +32,25 @@ class Product extends Model
     ];
     public $translatedAttributes = ['name', 'description'];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::addGlobalScope(new IsEnabledScope());
     }
 
     # !Relations
-    public function category()
+    public function category(): Relation
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function images()
+    public function images(): Relation
     {
-        return $this->morphMany(FileModel::class, 'model')->where(FileModel::TYPE_PRODUCT_IMAGE);
+        return $this->morphMany(FileModel::class, 'model')->where('type', FileModel::TYPE_PRODUCT_IMAGE);
+    }
+
+    public function params(): Relation
+    {
+        return $this->hasMany(ProductParameter::class);
     }
 
     # !Mutators

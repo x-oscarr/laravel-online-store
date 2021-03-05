@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\Utils;
 use App\Scopes\IsNotDeletedScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,14 +13,14 @@ use Illuminate\Support\Str;
 class File extends Model
 {
     # !Constants
-    const MIME_TYPES_IMAGE = 'image';
-    const MIME_TYPES_VIDEO = 'video';
-    const MIME_TYPES_AUDIO = 'audio';
-    const MIME_TYPES_ARCHIVE = 'archive';
-    const MIME_TYPES_DOCUMENT = 'document';
-    const MIME_TYPES_PDF = 'pdf';
+    public const MIME_TYPES_IMAGE = 'image';
+    public const MIME_TYPES_VIDEO = 'video';
+    public const MIME_TYPES_AUDIO = 'audio';
+    public const MIME_TYPES_ARCHIVE = 'archive';
+    public const MIME_TYPES_DOCUMENT = 'document';
+    public const MIME_TYPES_PDF = 'pdf';
 
-    const TYPES = [
+    public const TYPES = [
         self::MIME_TYPES_IMAGE => 'model.files.type.image',
         self::MIME_TYPES_VIDEO => 'model.files.type.video',
         self::MIME_TYPES_AUDIO => 'model.files.type.audio',
@@ -37,15 +38,15 @@ class File extends Model
     }
 
     # !Relationships
-    public function fileModel()
+    public function fileModel(): Relation
     {
-        return $this->belongsTo(FileModel::class, 'file_id');
+        return $this->belongsTo(FileModel::class, 'file_id', 'id');
     }
 
     # !Mutators
-   public function getFileUrl()
+   public function getFileUrlAttribute()
    {
-       return Storage::url($this->original_name);
+       return Storage::url($this->name);
    }
 
     # !Methods
@@ -72,8 +73,8 @@ class File extends Model
 
         $file = new self();
         $file->original_name = $originalName;
-        $file->name = $name;
-        $file->disc =
+        $file->name = "$path$name";
+        $file->disc = $disc;
         $file->mime_type = $uploadedFile->getMimeType();
         $file->size = $uploadedFile->getSize();
 

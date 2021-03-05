@@ -6,6 +6,9 @@ window._ = require('lodash');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
@@ -16,8 +19,8 @@ try {
     window.$.extend(require('webpack-jquery-ui/css'));
     // window.$.extend(require('google-maps'))
 
-    window.$.extend(require('./common/plugins'))
-    window.$.extend(require('./common/classy-nav.min'))
+    window.$.extend(require('./common/plugins'));
+    window.$.extend(require('./common/classy-nav.min'));
     require('wowjs');
     require('./common/active')
     // window.$.extend(require('./common/map-active'))
@@ -25,9 +28,11 @@ try {
     console.error(e);
 }
 
-window.axios = require('axios');
-
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.document.addEventListener('DOMContentLoaded', function () {
+    var document = window.document;
+    require('./common/cart');
+    require('./common/other');
+});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

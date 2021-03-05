@@ -17,6 +17,13 @@ return [
         resource_path('views'),
     ],
 
+    'pagination' => [
+        'category' => 18,
+        'view' => '_partials.pagination.page-list',
+        'simple_view' => '_partials.pagination.page-list',
+    ],
+
+
     /*
     |--------------------------------------------------------------------------
     | Compiled View Path

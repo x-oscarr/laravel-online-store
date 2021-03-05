@@ -2,63 +2,77 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class CartController extends Controller
+class CartController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return $this->response([
+            'data' => Cart::content(),
+            'total' => [
+                'amount' => Cart::total(),
+                'count' => Cart::count()
+            ],
+        ], Response::HTTP_OK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function updateItem(Request $request): JsonResponse
     {
-        //
+        $product = Product::find($request->get('itemId'));
+        if(!$product) {
+            return $this->error('product_not_found', ['id' => $product->id]);
+        }
+
+        $existsItems = Cart::search(function ($cartItem) use($product) {
+            return $cartItem->id === $product->id;
+        });
+
+        if($existsItems->isEmpty()) {
+            Cart::add($product->id, $product->name, $request->get('quantity') ?? 1, $product->price)
+                ->associate(Product::class);
+        } else {
+            Cart::remove($existsItems->first()->rowId);
+        }
+
+        return $this->response([
+            'status' => $existsItems->isEmpty(),
+            'total' => [
+                'amount' => Cart::total(),
+                'count' => Cart::count()
+            ],
+        ], Response::HTTP_OK);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function removeItem(Request $request): JsonResponse
     {
-        //
+        Cart::remove($request->get('rowId'));
+        return $this->response([
+            'total' => [
+                'amount' => Cart::total(),
+                'count' => Cart::count()
+            ],
+        ], Response::HTTP_OK);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function updateQuantity(Request $request): JsonResponse
     {
-        //
+        Cart::update($request->get('rowId'), $request->get('quantity'));
+        return $this->response([
+            'total' => [
+                'amount' => Cart::total(),
+                'count' => Cart::count()
+            ],
+        ], Response::HTTP_OK);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request): JsonResponse
     {
-        //
+        Cart::instance('wishlist')->erase('username');
+        return $this->response(null, Response::HTTP_NO_CONTENT);
     }
 }

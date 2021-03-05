@@ -6,12 +6,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends BaseResource
 {
-    const ATTR_PARAMETERS = ['name', 'email', 'phone_number', 'role', 'city', 'address'];
-    const SORT_PARAMETERS = ['relevance', '-popularity'];
-    const SEARCH_MODE_PARAMETERS = ['REGULAR', 'DESCRIPTIONS'];
-    const RELATION_PARAMETERS = ['items',];
+    public const ATTR_PARAMETERS = ['name', 'email', 'phone_number', 'role', 'city', 'address'];
+    public const SORT_PARAMETERS = ['relevance', '-popularity'];
+    public const SEARCH_MODE_PARAMETERS = ['REGULAR', 'DESCRIPTIONS'];
+    public const RELATION_PARAMETERS = ['items',];
 
-    public function toArray($request)
+    public function toArray($request): array
     {
         return parent::toArray($request);
     }

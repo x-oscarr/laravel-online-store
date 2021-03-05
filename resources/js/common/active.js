@@ -49,7 +49,7 @@
         $.scrollUp({
             scrollSpeed: 1000,
             easingType: 'easeInOutQuart',
-            scrollText: '<i class="fa fa-angle-up" aria-hidden="true"></i>'
+            scrollText: '<span class="material-icons line-height-inherit">expand_less</span>'
         });
     }
 

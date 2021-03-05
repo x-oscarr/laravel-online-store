@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('type')->default(\App\Models\Category::TYPE_DEFAULT);
             $table->string('code')->unique();
             $table->integer('price')->nullable();
+            $table->string('currency')->nullable();
             $table->integer('rating')->default(0);
             $table->integer('amount')->nullable();
             // Settings

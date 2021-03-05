@@ -1,57 +1,34 @@
 @extends('_layouts.base')
 
 @section('content')
-    <div class="single-product-area section-padding-100 clearfix">
+    <div class="single-product-area clearfix">
         <div class="container-fluid">
 
-            <div class="row">
-                <div class="col-12">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mt-50">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Furniture</a></li>
-                            <li class="breadcrumb-item"><a href="#">Chairs</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">white modern chair</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
+            {{ Breadcrumbs::render('product', $item) }}
 
             <div class="row">
                 <div class="col-12 col-lg-7">
                     <div class="single_product_thumb">
                         <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
-                                <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url(img/product-img/pro-big-1.jpg);">
-                                </li>
-                                <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(img/product-img/pro-big-2.jpg);">
-                                </li>
-                                <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url(img/product-img/pro-big-3.jpg);">
-                                </li>
-                                <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url(img/product-img/pro-big-4.jpg);">
-                                </li>
+                                @foreach($item->images as $image)
+                                    <li class="{{ $loop->first ? 'active' : '' }}"
+                                        data-target="#product_details_slider"
+                                        data-slide-to="{{ $loop->index }}"
+                                        style="background-image: url({{ $image->fileUrl }});">
+                                    </li>
+                                @endforeach
                             </ol>
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="gallery_img" href="img/product-img/pro-big-1.jpg">
-                                        <img class="d-block w-100" src="img/product-img/pro-big-1.jpg" alt="First slide">
+                                @foreach($item->images as $image)
+                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                    <a class="gallery_img" href="{{ $image->fileUrl }}">
+                                        <img class="d-block w-100"
+                                             src="{{ $image->fileUrl }}"
+                                             alt="Slide {{ $loop->index }}">
                                     </a>
                                 </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="img/product-img/pro-big-2.jpg">
-                                        <img class="d-block w-100" src="img/product-img/pro-big-2.jpg" alt="Second slide">
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="img/product-img/pro-big-3.jpg">
-                                        <img class="d-block w-100" src="img/product-img/pro-big-3.jpg" alt="Third slide">
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="img/product-img/pro-big-4.jpg">
-                                        <img class="d-block w-100" src="img/product-img/pro-big-4.jpg" alt="Fourth slide">
-                                    </a>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -61,43 +38,58 @@
                         <!-- Product Meta Data -->
                         <div class="product-meta-data">
                             <div class="line"></div>
-                            <p class="product-price">$180</p>
-                            <a href="product-details.html">
-                                <h6>White Modern Chair</h6>
+                            <p class="product-price">{{ $item->price.$item->currency }}</p>
+                            <a href="#">
+                                <h6>{{ $item->name }}</h6>
                             </a>
                             <!-- Ratings & Review -->
                             <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
                                 <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <span class="material-icons">star_rate</span>
+                                    <span class="material-icons">star_rate</span>
+                                    <span class="material-icons">star_rate</span>
+                                    <span class="material-icons">star_rate</span>
+                                    <span class="material-icons">star_rate</span>
                                 </div>
                                 <div class="review">
-                                    <a href="#">Write A Review</a>
+                                    <a href="#">@lang('ui.product.write_review')</a>
                                 </div>
                             </div>
                             <!-- Avaiable -->
-                            <p class="avaibility"><i class="fa fa-circle"></i> In Stock</p>
+                            @if($item->is_available)
+                                <p class="avaibility">
+                                    <i class="fa fa-circle in-stock"></i> @lang('ui.product.status.in_stock')
+                                </p>
+                            @else
+                                <p class="avaibility">
+                                    <i class="fa fa-circle not-available"></i> @lang('ui.product.status.not_available')
+                                </p>
+                            @endif
                         </div>
 
                         <div class="short_overview my-5">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid quae eveniet culpa officia quidem mollitia impedit iste asperiores nisi reprehenderit consequatur, autem, nostrum pariatur enim?</p>
+                            <p>{{ $item->description }}</p>
                         </div>
 
                         <!-- Add to Cart Form -->
-                        <form class="cart clearfix" method="post">
+                        <div class="cart clearfix">
                             <div class="cart-btn d-flex mb-50">
-                                <p>Qty</p>
+                                <p>@lang('ui.product.quantity')</p>
                                 <div class="quantity">
-                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                                    <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
+                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;">
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="number" name="quantity" class="qty-text" id="qty" step="1" min="1" max="{{ $item->amount ?? 9999 }}" value="1">
+                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;">
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    </span>
                                 </div>
+                                <button type="submit" name="add-to-cart" value="{{ $item->id }}" class="btn secondary mx-1">
+                                    <span class="material-icons vertical-bottom">add_shopping_cart</span> Add to cart
+                                </button>
+                                <a class="btn primary" href="#">Buy now!</a>
                             </div>
-                            <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
-                        </form>
+                        </div>
 
                     </div>
                 </div>
@@ -105,3 +97,9 @@
         </div>
     </div>
 @endsection
+<script>
+    import Button from "../../../vendor/laravel/jetstream/stubs/inertia/resources/js/Jetstream/Button";
+    export default {
+        components: {Button}
+    }
+</script>

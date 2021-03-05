@@ -20,6 +20,11 @@ class CreateProductParametersTable extends Migration
             $table->string('value')->nullable();
             $table->json('data')->nullable();
         });
+
+        Schema::create('product_parameter_product', function (Blueprint $table) {
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_parameter_id')->constrained()->onDelete('cascade');
+        });
     }
 
     /**
@@ -30,5 +35,6 @@ class CreateProductParametersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('product_parameters');
+        Schema::dropIfExists('product_parameter_product');
     }
 }

@@ -18,7 +18,7 @@ class ApiController extends Controller
         return Utils::apiResponse($data, $status);
     }
 
-    protected function error(string $key, ?array $data)
+    protected function error(string $key, ?array $data): JsonResponse
     {
         return Utils::apiErrorResponse($key, $data);
     }

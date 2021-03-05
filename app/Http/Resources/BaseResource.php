@@ -8,36 +8,35 @@ use Illuminate\Support\Facades\Auth;
 
 abstract class BaseResource extends JsonResource
 {
-    const GLOBAL_ABILITY_ROOT = 'global';
+    public const GLOBAL_ABILITY_ROOT = 'global';
+    public const ABILITIES = ['create', 'read', 'update', 'delete',];
+    public const ATTR_PARAMETERS = [];
+    public const SORT_PARAMETERS = [];
+    public const SEARCH_MODE_PARAMETERS = [];
+    public const RELATION_PARAMETERS = [];
 
-    const ABILITIES = ['create', 'read', 'update', 'delete',];
-    const ATTR_PARAMETERS = [];
-    const SORT_PARAMETERS = [];
-    const SEARCH_MODE_PARAMETERS = [];
-    const RELATION_PARAMETERS = [];
-
-    public function toArray($request)
+    public function toArray($request): array
     {
         return parent::toArray($request);
     }
 
-    static public function apiScopes(string $type, bool $isGlobal = false): array
+    public static function apiScopes(string $type, bool $isGlobal = false): array
     {
         $resourceAbilities = self::ABILITIES ?? ['read'];
         $prefix = self::getScopePrefix();
-        $root = $isGlobal ? ':' . BaseResource::GLOBAL_ABILITY_ROOT : '';
-        if ($type == '*') {
-            return array_map(function ($type) use (&$prefix, &$root) {
+        $root = $isGlobal ? ':' . self::GLOBAL_ABILITY_ROOT : '';
+        if ($type === '*') {
+            return array_map(static function ($type) use (&$prefix, &$root) {
                 return "$prefix:$type$root";
             }, $resourceAbilities);
         }
         return ["$prefix:$type$root"];
     }
 
-    static public function abilityAccess(string $ability, $isGlobal = false): bool
+    public static function abilityAccess(string $ability, $isGlobal = false): bool
     {
         $user = Auth::user();
-        $root = $isGlobal ? ':' . BaseResource::GLOBAL_ABILITY_ROOT : '';
+        $root = $isGlobal ? ':' . self::GLOBAL_ABILITY_ROOT : '';
         $scope = self::getScopePrefix() . ':' . $ability . $root;
 
         if ($user->tokenCan($scope)) {
@@ -46,14 +45,14 @@ abstract class BaseResource extends JsonResource
         return false;
     }
 
-    static public function isGlobalScope($scope): bool
+    public static function isGlobalScope($scope): bool
     {
-        return (bool)strripos($scope, ':' . BaseResource::GLOBAL_ABILITY_ROOT);
+        return (bool)strripos($scope, ':' . self::GLOBAL_ABILITY_ROOT);
     }
 
-    static protected function getScopePrefix(): string
+    protected static function getScopePrefix(): string
     {
-        $prefix = str_replace('Resource', '', last(explode("\\", get_called_class())));
+        $prefix = str_replace('Resource', '', last(explode("\\", static::class)));
         return strtolower($prefix);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Composers\IndexComposer;
+use App\Http\Composers\SettingsComposer;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
@@ -23,6 +26,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', 'App\Http\Composers\SettingsComposer');
+        View::composer('*', SettingsComposer::class);
+        View::composer('_partials.header', IndexComposer::class);
     }
 }
